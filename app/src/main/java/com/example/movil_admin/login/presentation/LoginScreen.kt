@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.movil_admin.core.network.TokenManager
 import com.example.movil_admin.ui.theme.ButtonBlue
 import com.example.movil_admin.ui.theme.ButtonWhite
 import com.example.movil_admin.ui.theme.Coral
@@ -48,6 +49,15 @@ fun LoginScreen(
     onSuccess: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val token = TokenManager.getToken()
+
+    LaunchedEffect (token) {
+        if (token !== null) {
+            navController.navigate("home") {
+                popUpTo(0) { inclusive = true } // limpia el backstack
+            }
+        }
+    }
 
     Column(
         modifier = modifier.fillMaxSize()

@@ -14,7 +14,7 @@ import com.example.movil_admin.register.presentation.RegisterScreen
 @Composable
 fun NavigationWrapper() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "login") {
 
         composable("Login") {
             val viewModel: LoginViewModel = viewModel() // Obtén el ViewModel proporcionado por el framework
@@ -34,7 +34,7 @@ fun NavigationWrapper() {
         }
 
         composable("home") {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
     }
 }

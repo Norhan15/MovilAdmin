@@ -1,8 +1,6 @@
 package com.example.movil_admin.home.presentation
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -21,8 +18,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.movil_admin.core.presetation.composable.NavBar
-import com.example.movil_admin.core.presetation.layout.GenericLayout
+import androidx.navigation.NavController
+import com.example.movil_admin.core.presetation.layout.ProtectedLayout
 import com.example.movil_admin.home.presentation.composable.ExampleCard
 import com.example.movil_admin.home.presentation.composable.PackCard
 import com.example.movil_admin.ui.theme.NewBlue
@@ -30,7 +27,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel(),
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
@@ -46,7 +44,7 @@ fun HomeScreen(
         }
     }
 
-    GenericLayout { paddingValues ->
+    ProtectedLayout(navController) { paddingValues ->
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
