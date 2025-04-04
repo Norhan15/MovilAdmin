@@ -2,16 +2,16 @@ package com.example.movil_admin.login.data.repository
 
 
 import com.example.movil_admin.core.network.RetrofitHelper
-import com.example.movil_admin.register.data.model.CreateUserRequest
-import com.example.movil_admin.register.data.model.response.RegisterResponse
+import com.example.movil_admin.login.data.model.request.LoginRequest
+import com.example.movil_admin.login.data.model.response.LoginResponse
 import org.json.JSONObject
 
-class AuthRepository {
-    private val service = RetrofitHelper.registerService
+class LoginRepository {
+    private val service = RetrofitHelper.loginService
 
-    suspend fun createUser(user: CreateUserRequest): Result<RegisterResponse> {
+    suspend fun login(user: LoginRequest): Result<LoginResponse> {
         return try {
-            val response = service.createUser(user)
+            val response = service.login(user)
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {

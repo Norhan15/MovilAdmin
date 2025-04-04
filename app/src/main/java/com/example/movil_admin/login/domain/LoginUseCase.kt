@@ -1,11 +1,19 @@
 package com.example.movil_admin.login.domain
 
-import com.example.movil_admin.login.data.repository.AuthRepository
+import android.provider.ContactsContract.CommonDataKinds.Email
+import com.example.movil_admin.core.network.TokenManager
+import com.example.movil_admin.login.data.model.request.LoginRequest
+import com.example.movil_admin.login.data.model.response.LoginResponse
+import com.example.movil_admin.login.data.repository.LoginRepository
 
 class LoginUseCase {
-    private val authRepository = AuthRepository()
+    private val repository = LoginRepository()
 
-    suspend operator fun invoke(username: String, password: String){//: Result<String> {
-//        return authRepository.login(username, password)
+    suspend operator fun invoke(email: String, password: String): Result<LoginResponse> {
+        val result = repository.login(LoginRequest(email, password))
+        if (result.isSuccess) {
+            TokenManager.saveToken(result.getOrThrow().token)
+        }
+        return result;
     }
 }

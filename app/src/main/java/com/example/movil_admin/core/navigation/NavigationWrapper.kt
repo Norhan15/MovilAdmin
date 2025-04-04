@@ -19,9 +19,10 @@ fun NavigationWrapper() {
             val viewModel: LoginViewModel = viewModel() // Obtén el ViewModel proporcionado por el framework
             LoginScreen(
                 viewModel = viewModel,
-                onNavigateToNotes = { navController.navigate("home") },
-                onNavigateToRegister = { navController.navigate("register") }
-            )
+                navController = navController
+            ){
+                navController.navigate("home")
+            }
         }
 
         composable("register") {
