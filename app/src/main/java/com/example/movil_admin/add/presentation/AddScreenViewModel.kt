@@ -43,7 +43,7 @@ class AddScreenViewModel : ViewModel() {
     fun onPackPriceChange(value: String) {
         if (value.isNotEmpty()) {
             _uiState.value = _uiState.value.copy(
-                packPrice = value.toFloat()
+                packPrice = value
             )
         }
     }
@@ -73,7 +73,7 @@ class AddScreenViewModel : ViewModel() {
                     _uiState.value.packName,
                     _uiState.value.packDescription,
                     _uiState.value.packDetails,
-                    _uiState.value.packPrice
+                    _uiState.value.packPrice.toFloat()
                 )
 
                 if (result.isFailure) {
@@ -98,7 +98,7 @@ class AddScreenViewModel : ViewModel() {
 data class AddUiState(
     val packName: String = "",
     val packDescription: String = "",
-    val packPrice: Float = 0.0f,
+    val packPrice: String = "",
     val packDetails: String = "",
 
     val exampleName: String = "",
