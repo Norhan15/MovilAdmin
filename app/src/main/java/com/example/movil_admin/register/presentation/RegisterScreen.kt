@@ -68,8 +68,9 @@ fun RegisterScreen(
                 .fillMaxWidth()
                 .weight(3f)
                 .background(
-                    color = White,
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp) // Bordes redondeados
+                    color = White, shape = RoundedCornerShape(
+                        topStart = 16.dp, topEnd = 16.dp
+                    ) // Bordes redondeados
                 )
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Top,
@@ -79,8 +80,8 @@ fun RegisterScreen(
 
             // Inputs
             OutlinedTextField(
-                value = uiState.email,
-                onValueChange = { viewModel.onEmailChange(it) },
+                value = uiState.name,
+                onValueChange = { viewModel.onNameChange(it) },
                 label = { Text("Nombre") },
                 leadingIcon = {
                     Icon(Icons.Default.Person, contentDescription = null)
@@ -92,8 +93,8 @@ fun RegisterScreen(
             )
 
             OutlinedTextField(
-                value = uiState.password,
-                onValueChange = { viewModel.onPasswordChange(it) },
+                value = uiState.email,
+                onValueChange = { viewModel.onEmailChange(it) },
                 label = { Text("Correo") },
                 leadingIcon = {
                     Icon(Icons.Default.Email, contentDescription = null)
@@ -105,8 +106,8 @@ fun RegisterScreen(
             )
 
             OutlinedTextField(
-                value = uiState.confirmPassword,
-                onValueChange = { viewModel.onConfirmPasswordChange(it) },
+                value = uiState.password,
+                onValueChange = { viewModel.onPasswordChange(it) },
                 label = { Text("Contraseña") },
                 leadingIcon = {
                     Icon(Icons.Default.Lock, contentDescription = null)
@@ -120,15 +121,15 @@ fun RegisterScreen(
 
             // Buttons
             Button(
-                onClick = { viewModel.register() },
+                onClick = {
+                    viewModel.register()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                enabled = uiState.isFormValid,
                 shape = RectangleShape, // Hacer los bordes cuadrados
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ButtonBlue,
-                    contentColor = ButtonWhite
+                    containerColor = ButtonBlue, contentColor = ButtonWhite
                 )
             ) {
                 Text("Crear cuenta", style = MaterialTheme.typography.labelLarge)
@@ -156,18 +157,15 @@ fun RegisterScreen(
 
             uiState.errorMessage?.let { error ->
                 Text(
-                    text = error,
-                    color = Coral,
-                    modifier = Modifier.padding(top = 16.dp)
+                    text = error, color = Coral, modifier = Modifier.padding(top = 16.dp)
                 )
             }
-        }
-    }
 
-    // Handle registration success
-    LaunchedEffect(uiState.isRegistrationSuccessful) {
-        if (uiState.isRegistrationSuccessful) {
-            onRegisterSuccess()
+            LaunchedEffect(uiState.isSuccess) {
+                if (uiState.isSuccess) {
+                    onRegisterSuccess()
+                }
+            }
         }
     }
 }

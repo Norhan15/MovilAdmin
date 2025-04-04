@@ -5,11 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.movil_admin.core.navigation.NavigationWrapper
+import com.example.movil_admin.core.network.TokenManager
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        TokenManager.init(this)
         enableEdgeToEdge()
         setContent {
             NavigationWrapper()

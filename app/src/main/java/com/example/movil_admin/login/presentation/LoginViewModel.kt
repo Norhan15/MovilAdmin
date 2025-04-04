@@ -35,25 +35,25 @@ class LoginViewModel : ViewModel() {
     }
 
     fun onLoginClick() {
-        val usernameValue = _username.value.orEmpty()
-        val passwordValue = _password.value.orEmpty()
-
-        if (usernameValue.isBlank() || passwordValue.isBlank()) {
-            _errorMessage.value = "Todos los campos son obligatorios"
-            return
-        }
-
-        viewModelScope.launch {
-            _isLoading.value = true
-            val result = loginUseCase(usernameValue, passwordValue)
-            result.onSuccess { token ->
-                _errorMessage.value = null
-                _navigationCommand.value = "Notes"
-            }.onFailure { exception ->
-                _errorMessage.value = exception.message ?: "Error desconocido"
-            }
-            _isLoading.value = false
-        }
+//        val usernameValue = _username.value.orEmpty()
+//        val passwordValue = _password.value.orEmpty()
+//
+//        if (usernameValue.isBlank() || passwordValue.isBlank()) {
+//            _errorMessage.value = "Todos los campos son obligatorios"
+//            return
+//        }
+//
+//        viewModelScope.launch {
+//            _isLoading.value = true
+//            val result = loginUseCase(usernameValue, passwordValue)
+//            result.onSuccess { token ->
+//                _errorMessage.value = null
+//                _navigationCommand.value = "Notes"
+//            }.onFailure { exception ->
+//                _errorMessage.value = exception.message ?: "Error desconocido"
+//            }
+//            _isLoading.value = false
+//        }
     }
 
     fun onNavigationHandled() {

@@ -2,6 +2,7 @@ package com.example.movil_admin.core.network
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 
 object TokenManager {
@@ -19,6 +20,7 @@ object TokenManager {
     }
 
     fun saveToken(token: String) {
+        Log.d("Admin", "Saving token $token")
         sharedPreferences.edit() { putString(TOKEN_KEY, token) }
     }
 
