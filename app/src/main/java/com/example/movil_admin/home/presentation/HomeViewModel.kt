@@ -1,8 +1,8 @@
 package com.example.movil_admin.home.presentation
 
 import androidx.lifecycle.ViewModel
-import com.example.movil_admin.home.data.model.entities.Example
-import com.example.movil_admin.home.data.model.entities.Pack
+import com.example.movil_admin.core.data.model.entities.Example
+import com.example.movil_admin.core.data.model.entities.Pack
 import com.example.movil_admin.home.domain.ListExamplesUseCase
 import com.example.movil_admin.home.domain.ListPacksUseCase
 import com.example.movil_admin.home.domain.RemoveExampleUseCase

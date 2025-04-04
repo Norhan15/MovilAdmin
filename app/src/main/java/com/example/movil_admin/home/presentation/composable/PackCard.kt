@@ -1,7 +1,5 @@
 package com.example.movil_admin.home.presentation.composable
 
-import android.content.Intent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,8 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
-import com.example.movil_admin.home.data.model.entities.Pack
+import com.example.movil_admin.core.data.model.entities.Pack
 import com.example.movil_admin.ui.theme.FifthRed
 import com.example.movil_admin.ui.theme.FourthLightSkyBlue
 import com.example.movil_admin.ui.theme.NewBlue

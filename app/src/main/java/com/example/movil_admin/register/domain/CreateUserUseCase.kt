@@ -7,14 +7,15 @@ import com.example.movil_admin.register.data.repository.RegisterRepository
 
 
 class CreateUserUseCase {
- private val repository = RegisterRepository()
+    private val repository = RegisterRepository()
 
-    suspend operator fun invoke(name: String, email:String, password: String): Result<RegisterResponse> {
-       val result = repository.createUser(CreateUserRequest(name, email, password, "admin"))
-        if (result.isSuccess)
-        {
+    suspend operator fun invoke(
+        name: String, email: String, password: String
+    ): Result<RegisterResponse> {
+        val result = repository.createUser(CreateUserRequest(name, email, password, "admin"))
+        if (result.isSuccess) {
             TokenManager.saveToken(result.getOrThrow().token)
         }
-        return  result;
+        return result;
     }
 }

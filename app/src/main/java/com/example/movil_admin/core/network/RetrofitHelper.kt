@@ -1,6 +1,7 @@
 package com.example.movil_admin.core.network
 
 
+import com.example.movil_admin.add.data.source.AddService
 import com.example.movil_admin.core.network.interceptor.AuthInterceptor
 import com.example.movil_admin.core.network.interceptor.HeaderInterceptor
 import com.example.movil_admin.core.network.interceptor.LoggingInterceptor
@@ -52,6 +53,10 @@ object RetrofitHelper {
 
     val homeService: HomeService by lazy {
         protectedRetrofit.create(HomeService::class.java)
+    }
+
+    val addService: AddService by lazy {
+        protectedRetrofit.create(AddService::class.java)
     }
 
 }

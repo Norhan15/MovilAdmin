@@ -1,4 +1,4 @@
-package com.example.movil_admin.home.data.model.entities
+package com.example.movil_admin.core.data.model.entities
 
 import android.telecom.Call.Details
 

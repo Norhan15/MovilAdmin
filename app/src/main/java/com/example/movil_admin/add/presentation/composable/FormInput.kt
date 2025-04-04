@@ -1,4 +1,4 @@
-package com.example.movil_admin.add.composable
+package com.example.movil_admin.add.presentation.composable
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +23,7 @@ fun FormInput(
     placeholder: String,
     textArea: Boolean = false,
     numeric: Boolean = false,
-    value: String = "",
+    value: String =  "",
     onChange: (String) -> Unit = {}
 ) {
     Column(

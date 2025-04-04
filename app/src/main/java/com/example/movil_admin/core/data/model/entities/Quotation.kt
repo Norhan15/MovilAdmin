@@ -1,4 +1,4 @@
-package com.example.movil_admin.home.data.model.entities
+package com.example.movil_admin.core.data.model.entities
 
 data class Quotation(
     val id: Int,

@@ -1,4 +1,4 @@
-package com.example.movil_admin.add.composable
+package com.example.movil_admin.add.presentation.composable
 
 import android.widget.Button
 import androidx.compose.material3.ButtonDefaults
