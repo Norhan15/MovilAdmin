@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.movil_admin.home.presentation.HomeScreen
 import com.example.movil_admin.login.presentation.LoginScreen
 import com.example.movil_admin.login.presentation.LoginViewModel
 import com.example.movil_admin.register.presentation.RegisterScreen
@@ -13,7 +14,7 @@ import com.example.movil_admin.register.presentation.RegisterScreen
 @Composable
 fun NavigationWrapper() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "Login") {
+    NavHost(navController = navController, startDestination = "home") {
 
         composable("Login") {
             val viewModel: LoginViewModel = viewModel() // Obtén el ViewModel proporcionado por el framework
@@ -30,6 +31,10 @@ fun NavigationWrapper() {
                 onRegisterSuccess = { navController.navigate("home") },
                 onNavigateToLogin = { navController.navigate("login") }
             )
+        }
+
+        composable("home") {
+            HomeScreen()
         }
     }
 }
