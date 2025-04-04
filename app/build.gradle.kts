@@ -61,6 +61,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)    //Navegation
     implementation(libs.kotlinx.serialization.json)     //Navegation
+    implementation(libs.logging.interceptor) // Logging
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
