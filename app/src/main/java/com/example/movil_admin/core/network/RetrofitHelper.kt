@@ -4,6 +4,7 @@ package com.example.movil_admin.core.network
 import com.example.movil_admin.core.network.interceptor.AuthInterceptor
 import com.example.movil_admin.core.network.interceptor.HeaderInterceptor
 import com.example.movil_admin.core.network.interceptor.LoggingInterceptor
+import com.example.movil_admin.home.data.source.HomeService
 import com.example.movil_admin.login.data.datasource.LoginService
 import com.example.movil_admin.register.data.datasource.RegisterService
 import okhttp3.OkHttpClient
@@ -47,6 +48,10 @@ object RetrofitHelper {
 
     val loginService: LoginService by lazy {
         publicRetrofit.create(LoginService::class.java)
+    }
+
+    val homeService: HomeService by lazy {
+        protectedRetrofit.create(HomeService::class.java)
     }
 
 }
