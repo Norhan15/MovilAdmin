@@ -17,6 +17,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,12 +26,14 @@ import com.example.movil_admin.core.presetation.layout.GenericLayout
 import com.example.movil_admin.home.presentation.composable.ExampleCard
 import com.example.movil_admin.home.presentation.composable.PackCard
 import com.example.movil_admin.ui.theme.NewBlue
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.loadPacks()
@@ -68,7 +71,12 @@ fun HomeScreen(
             itemsIndexed(uiState.packs.toList()) { _, pack ->
                 PackCard(
                     pack = pack,
-                    onDelete = { }
+                    onDelete = {
+                        id ->
+                        coroutineScope.launch {
+                            viewModel.removePack(id)
+                        }
+                    }
                 )
             }
 
@@ -86,7 +94,12 @@ fun HomeScreen(
             itemsIndexed(uiState.examples.toList()) {_, example -> //
                 ExampleCard(
                     example = example,
-                    onDelete = { }
+                    onDelete = {
+                        id ->
+                        coroutineScope.launch {
+                            viewModel.removeExample(id)
+                        }
+                    }
                 )
             }
         }

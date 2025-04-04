@@ -21,7 +21,6 @@ fun GenericLayout(content: @Composable (PaddingValues) -> Unit) {
             }
         }
     ) { paddingValues ->
-        // Pasamos los paddingValues al contenido para que pueda ajustarse correctamente
         content(paddingValues)
     }
 }
