@@ -1,14 +1,14 @@
 package com.example.movil_admin.core.presetation.layout
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.movil_admin.core.presetation.composable.NavBar
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun GenericLayout(content: @Composable () -> Unit = {}) {
+fun GenericLayout(content: @Composable (PaddingValues) -> Unit) {
     Scaffold(
         bottomBar = {
             NavBar() { selectedIndex ->
@@ -19,7 +19,9 @@ fun GenericLayout(content: @Composable () -> Unit = {}) {
                     3 -> println("Salir seleccionado")
                 }
             }
-        }) {
-        content()
+        }
+    ) { paddingValues ->
+        // Pasamos los paddingValues al contenido para que pueda ajustarse correctamente
+        content(paddingValues)
     }
 }
