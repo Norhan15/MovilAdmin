@@ -1,6 +1,11 @@
 package com.example.movil_admin.add.presentation
 
+import android.Manifest
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,27 +13,67 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.movil_admin.add.presentation.composable.Button
 import com.example.movil_admin.add.presentation.composable.FormInput
 import com.example.movil_admin.core.presetation.layout.ProtectedLayout
+import com.example.movil_admin.core.provider.MediaProvider
 import com.example.movil_admin.ui.theme.NewBlue
 
 
 @Composable
 fun AddScreen(viewModel: AddScreenViewModel = viewModel(), navController: NavController) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val mediaProvider = remember { MediaProvider(context) }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            viewModel.updateImageUri(mediaProvider.getTempImageUri())
+        } else {
+            viewModel.setError("No se pudo capturar la imagen")
+        }
+    }
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        viewModel.updateImageUri(uri)
+    }
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            cameraLauncher.launch(mediaProvider.getImageCaptureUri())
+        } else {
+            viewModel.setError("Se requiere permiso de cámara para tomar fotos")
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaProvider.cleanupTempFiles()
+        }
+    }
 
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
@@ -60,19 +105,13 @@ fun AddScreen(viewModel: AddScreenViewModel = viewModel(), navController: NavCon
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    text = "Paquete",
-                    primary = uiState.isFocusOnPackForm,
-                    onClick = {
+                    text = "Paquete", primary = uiState.isFocusOnPackForm, onClick = {
                         viewModel.focusOnPack()
-                    }
-                )
+                    })
                 Button(
-                    text = "Ejemplo",
-                    primary = !uiState.isFocusOnPackForm,
-                    onClick = {
+                    text = "Ejemplo", primary = !uiState.isFocusOnPackForm, onClick = {
                         viewModel.focusOnExample()
-                    }
-                )
+                    })
             }
 
             if (uiState.isFocusOnPackForm) {
@@ -111,8 +150,7 @@ fun AddScreen(viewModel: AddScreenViewModel = viewModel(), navController: NavCon
                     text = "Publicar",
                     primary = true,
                     onClick = { viewModel.createNewPack() },
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
             } else {
                 FormInput(
@@ -123,25 +161,56 @@ fun AddScreen(viewModel: AddScreenViewModel = viewModel(), navController: NavCon
                     viewModel.onExampleNameChange(value)
                 }
                 FormInput(
-                    label = "Enlace",
-                    placeholder = "www.website.com",
-                    value = uiState.exampleLink
+                    label = "Enlace", placeholder = "www.website.com", value = uiState.exampleLink
                 ) { value ->
                     viewModel.onExampleLinkChange(value)
                 }
-                Button(text = "Cargar imagen", primary = false, onClick = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Button(text = "Cargar imagen", primary = false, onClick = {
+                        viewModel.setLoading(true)
+                        imagePickerLauncher.launch("image/*")
+                    })
 
-                })
-                Button(
-                    text = "Publicar",
-                    primary = true,
-                    onClick = {},
+                    Button(text = "Tomar imagen", primary = false, onClick = {
+                        viewModel.setLoading(true)
+                        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    })
+                }
+
+                // Mostrar la imagen seleccionada
+                Spacer(modifier = Modifier.height(16.dp))
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp)
-                )
+                        .height(200.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (uiState.isLoading) {
+                        CircularProgressIndicator()
+                    } else if (uiState.imageUri != null) {
+                        AsyncImage(
+                            model = uiState.imageUri,
+                            contentDescription = "Imagen seleccionada",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Text("No hay imagen seleccionada")
+                    }
+                }
             }
 
+            Button(
+                text = "Publicar",
+                primary = true,
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+            )
         }
+
     }
 }

@@ -1,9 +1,11 @@
 package com.example.movil_admin.add.presentation
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.movil_admin.add.domain.CreatePackUseCase
+import com.example.movil_admin.core.provider.MediaProvider
 import com.example.movil_admin.home.presentation.HomeUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,6 +68,24 @@ class AddScreenViewModel : ViewModel() {
         )
     }
 
+    fun updateImageUri(uri: Uri?) {
+        _uiState.value = _uiState.value.copy(
+            imageUri = uri,
+            isLoading = false
+        )
+    }
+
+    fun setLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    fun setError(message: String?) {
+        _uiState.value = _uiState.value.copy(
+            errorMessage = message,
+            isLoading = false
+        )
+    }
+
     fun createNewPack() {
         viewModelScope.launch {
             try {
@@ -106,5 +126,9 @@ data class AddUiState(
 
     val isFocusOnPackForm: Boolean = true,
 
-    val isSuccess: Boolean = false
+    val isSuccess: Boolean = false,
+
+    val isLoading: Boolean = false,
+    val imageUri: Uri? = null,
+    val errorMessage: String? = null
 )
