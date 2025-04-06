@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "555253212505",
+    "project_id": "royalty-2dae4",
+    "storage_bucket": "royalty-2dae4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555253212505:android:7d85d0998d2a83ba16d848",
+        "android_client_info": {
+          "package_name": "com.example.movil_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHuFjbQFqqJeNV0VKZ-K6hV0LcPYXnihg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555253212505:android:2ab0418be8964f7b16d848",
+        "android_client_info": {
+          "package_name": "com.example.state"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHuFjbQFqqJeNV0VKZ-K6hV0LcPYXnihg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
