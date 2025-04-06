@@ -1,6 +1,6 @@
 package com.example.movil_admin.core.provider
 
-import android.R
+import com.example.state.R
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -67,7 +67,7 @@ class FirebaseProvider:FirebaseMessagingService() {
 
         // Crear la notificación
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.star_on) // Usa un ícono en drawable
+            .setSmallIcon(R.drawable.ic_home) // Usa un ícono en drawable
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
