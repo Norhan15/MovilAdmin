@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitHelper {
 
-    private const val BASE_URL = "http://192.168.100.13:8000/api/"
+    private const val BASE_URL = "https://royalty.protectify.shop/api/"
 
     private val publicClient = OkHttpClient.Builder()
         .addInterceptor(LoggingInterceptor())
