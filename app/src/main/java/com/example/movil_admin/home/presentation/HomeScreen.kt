@@ -23,6 +23,8 @@ import com.example.movil_admin.core.presetation.layout.ProtectedLayout
 import com.example.movil_admin.home.presentation.composable.ExampleCard
 import com.example.movil_admin.home.presentation.composable.PackCard
 import com.example.movil_admin.ui.theme.NewBlue
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -34,9 +36,16 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        viewModel.loadPacks()
-        viewModel.loadExamples()
+        coroutineScope {
+            val packsDeferred = async { viewModel.loadPacks() }
+            val examplesDeferred = async { viewModel.loadExamples() }
+
+            // Esperar resultados (opcional si no necesitas esperar)
+            packsDeferred.await()
+            examplesDeferred.await()
+        }
     }
+
 
     DisposableEffect(Unit) {
         onDispose {
