@@ -6,6 +6,7 @@ import com.example.movil_admin.core.network.interceptor.AuthInterceptor
 import com.example.movil_admin.core.network.interceptor.HeaderInterceptor
 import com.example.movil_admin.core.network.interceptor.LoggingInterceptor
 import com.example.movil_admin.home.data.source.HomeService
+import com.example.movil_admin.list.data.source.ListService
 import com.example.movil_admin.login.data.datasource.LoginService
 import com.example.movil_admin.register.data.datasource.RegisterService
 import okhttp3.OkHttpClient
@@ -59,4 +60,7 @@ object RetrofitHelper {
         protectedRetrofit.create(AddService::class.java)
     }
 
+    val listService: ListService by lazy {
+        protectedRetrofit.create(ListService::class.java)
+    }
 }

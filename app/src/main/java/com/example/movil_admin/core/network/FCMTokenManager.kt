@@ -7,7 +7,7 @@ import androidx.core.content.edit
 
 object FCMTokenManager {
     private const val PREF_NAME = "TokenPreferences"
-    private const val TOKEN_KEY = "auth_token"
+    private const val TOKEN_KEY = "fcm_token"
     private lateinit var sharedPreferences: SharedPreferences
 
     fun init(context: Context) {

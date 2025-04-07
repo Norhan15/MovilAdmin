@@ -1,6 +1,6 @@
 package com.example.movil_admin.core.data.model.entities
 
-data class Quotation(
+data class Quote(
     val id: Int,
     val buyer_name: String,
     val email: String,

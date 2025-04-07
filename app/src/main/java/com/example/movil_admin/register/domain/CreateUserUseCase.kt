@@ -1,5 +1,6 @@
 package com.example.movil_admin.register.domain
 
+import com.example.movil_admin.core.network.FCMTokenManager
 import com.example.movil_admin.core.network.TokenManager
 import com.example.movil_admin.register.data.model.CreateUserRequest
 import com.example.movil_admin.register.data.model.response.RegisterResponse
@@ -12,7 +13,8 @@ class CreateUserUseCase {
     suspend operator fun invoke(
         name: String, email: String, password: String
     ): Result<RegisterResponse> {
-        val result = repository.createUser(CreateUserRequest(name, email, password, "admin"))
+        val result = repository.createUser(CreateUserRequest(name, email, password, "admin",
+            FCMTokenManager.getToken() ?: ""))
         if (result.isSuccess) {
             TokenManager.saveToken(result.getOrThrow().token)
         }

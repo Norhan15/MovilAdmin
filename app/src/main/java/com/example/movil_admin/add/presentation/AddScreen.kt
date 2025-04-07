@@ -200,16 +200,15 @@ fun AddScreen(viewModel: AddScreenViewModel = viewModel(), navController: NavCon
                         Text("No hay imagen seleccionada")
                     }
                 }
+
+                Button(
+                    text = "Publicar", primary = true, onClick = {
+                        viewModel.createNewExample(context)
+                    }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                )
             }
-
-            Button(
-                text = "Publicar", primary = true, onClick = {
-                    viewModel.createNewExample(context)
-                }, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
         }
-
     }
 }
