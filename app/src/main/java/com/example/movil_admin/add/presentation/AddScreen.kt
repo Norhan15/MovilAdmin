@@ -203,10 +203,9 @@ fun AddScreen(viewModel: AddScreenViewModel = viewModel(), navController: NavCon
             }
 
             Button(
-                text = "Publicar",
-                primary = true,
-                onClick = {},
-                modifier = Modifier
+                text = "Publicar", primary = true, onClick = {
+                    viewModel.createNewExample(context)
+                }, modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp)
             )

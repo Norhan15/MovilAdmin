@@ -1,9 +1,11 @@
 package com.example.movil_admin.add.presentation
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.movil_admin.add.domain.CreateExampleUseCase
 import com.example.movil_admin.add.domain.CreatePackUseCase
 import com.example.movil_admin.core.provider.MediaProvider
 import com.example.movil_admin.home.presentation.HomeUiState
@@ -17,6 +19,7 @@ class AddScreenViewModel : ViewModel() {
     val uiState: StateFlow<AddUiState> = _uiState.asStateFlow()
 
     val createPackUseCase = CreatePackUseCase()
+    val createExampleUseCase = CreateExampleUseCase()
 
     fun focusOnPack() {
         _uiState.value = _uiState.value.copy(
@@ -94,6 +97,34 @@ class AddScreenViewModel : ViewModel() {
                     _uiState.value.packDescription,
                     _uiState.value.packDetails,
                     _uiState.value.packPrice.toFloat()
+                )
+
+                if (result.isFailure) {
+                    _uiState.value = _uiState.value.copy(
+                        isSuccess = false
+                    )
+                } else {
+                    _uiState.value = _uiState.value.copy(
+                        isSuccess = true
+                    )
+                }
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isSuccess = false
+                )
+            }
+        }
+    }
+
+    fun createNewExample(context: Context){
+        viewModelScope.launch {
+            try {
+                val result = createExampleUseCase.invoke(
+                    _uiState.value.exampleName,
+                    _uiState.value.exampleLink,
+                    _uiState.value.imageUri,
+                    context
                 )
 
                 if (result.isFailure) {
