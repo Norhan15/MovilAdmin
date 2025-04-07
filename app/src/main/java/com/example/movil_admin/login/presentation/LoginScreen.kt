@@ -28,9 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.movil_admin.core.network.TokenManager
 import com.example.movil_admin.ui.theme.ButtonBlue
 import com.example.movil_admin.ui.theme.ButtonWhite
 import com.example.movil_admin.ui.theme.Coral
@@ -41,21 +45,18 @@ import com.example.movil_admin.ui.theme.White
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel(),
-    onNavigateToNotes: () -> Unit = {},
-    onNavigateToRegister: () -> Unit = {}
+    navController: NavController,
+    onSuccess: () -> Unit,
 ) {
-    val username by viewModel.username.observeAsState("")
-    val password by viewModel.password.observeAsState("")
-    val errorMessage by viewModel.errorMessage.observeAsState(null)
-    val isLoading by viewModel.isLoading.observeAsState(false)
-    val navigationCommand by viewModel.navigationCommand.observeAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val token = TokenManager.getToken()
 
-    LaunchedEffect(navigationCommand) {
-        when (navigationCommand) {
-            "Notes" -> onNavigateToNotes()
-            "Register" -> onNavigateToRegister()
+    LaunchedEffect (token) {
+        if (token !== null) {
+            navController.navigate("home") {
+                popUpTo(0) { inclusive = true } // limpia el backstack
+            }
         }
-        viewModel.onNavigationHandled()
     }
 
     Column(
@@ -70,8 +71,7 @@ fun LoginScreen(
             contentAlignment = Alignment.CenterStart
         ) {
             Column(
-                modifier = Modifier.padding(start = 16.dp),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.padding(start = 16.dp), verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Iniciar sesión",
@@ -92,8 +92,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .weight(2f)
                 .background(
-                    color = White,
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                    color = White, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                 )
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Top,
@@ -103,8 +102,8 @@ fun LoginScreen(
 
             // Inputs
             OutlinedTextField(
-                value = username,
-                onValueChange = { viewModel.onUsernameChange(it) },
+                value = uiState.email,
+                onValueChange = { viewModel.onEmailChange(it) },
                 label = { Text("Correo") },
                 leadingIcon = {
                     Icon(Icons.Default.Email, contentDescription = null)
@@ -116,7 +115,7 @@ fun LoginScreen(
             )
 
             OutlinedTextField(
-                value = password,
+                value = uiState.password,
                 onValueChange = { viewModel.onPasswordChange(it) },
                 label = { Text("Contraseña") },
                 leadingIcon = {
@@ -136,8 +135,8 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RectangleShape,
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = ButtonBlue
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ButtonBlue, contentColor = ButtonWhite
                 ),
                 border = BorderStroke(1.dp, ButtonBlue)
             ) {
@@ -147,29 +146,33 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { viewModel.navigateToRegister() },
+                onClick = { navController.navigate("register") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RectangleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = ButtonBlue,
-                    contentColor = ButtonWhite
+
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = ButtonBlue
                 )
             ) {
                 Text("Crear cuenta", style = MaterialTheme.typography.labelLarge)
             }
 
-            if (isLoading) {
+            if (uiState.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.padding(16.dp))
             }
 
-            errorMessage?.let { error ->
+            uiState.errorMessage?.let { error ->
                 Text(
-                    text = error,
-                    color = Coral,
-                    modifier = Modifier.padding(top = 16.dp)
+                    text = error, color = Coral, modifier = Modifier.padding(top = 16.dp)
                 )
+            }
+
+            LaunchedEffect(uiState.isSuccess) {
+                if (uiState.isSuccess) {
+                    onSuccess()
+                }
             }
         }
     }

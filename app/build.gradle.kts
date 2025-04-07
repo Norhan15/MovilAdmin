@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrainsKotlinSerialization)
+    id("com.google.gms.google-services") // Firebase push
 }
 
 android {
@@ -61,6 +62,11 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)    //Navegation
     implementation(libs.kotlinx.serialization.json)     //Navegation
+    implementation(libs.logging.interceptor) // Logging
+    implementation(libs.coil.compose) // images
+    implementation(platform(libs.firebase.bom)) // Firebase
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging.ktx) // Firebase
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

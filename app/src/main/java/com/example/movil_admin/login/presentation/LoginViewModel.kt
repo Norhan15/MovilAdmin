@@ -6,62 +6,58 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movil_admin.login.domain.LoginUseCase
+import com.example.movil_admin.register.presentation.RegisterUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
     private val loginUseCase = LoginUseCase()
 
-    private val _username = MutableLiveData("")
-    val username: LiveData<String> = _username
+    private val _uiState = MutableStateFlow(LoginUiStates())
+    val uiState: StateFlow<LoginUiStates> = _uiState.asStateFlow()
 
-    private val _password = MutableLiveData("")
-    val password: LiveData<String> = _password
 
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> = _errorMessage
-
-    private val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _navigationCommand = MutableLiveData<String?>()
-    val navigationCommand: LiveData<String?> = _navigationCommand
-
-    fun onUsernameChange(newUsername: String) {
-        _username.value = newUsername
+    fun onEmailChange(email: String) {
+        _uiState.value = _uiState.value.copy(email = email)
     }
 
-    fun onPasswordChange(newPassword: String) {
-        _password.value = newPassword
+    fun onPasswordChange(password: String) {
+        _uiState.value = _uiState.value.copy(password = password)
     }
 
     fun onLoginClick() {
-        val usernameValue = _username.value.orEmpty()
-        val passwordValue = _password.value.orEmpty()
-
-        if (usernameValue.isBlank() || passwordValue.isBlank()) {
-            _errorMessage.value = "Todos los campos son obligatorios"
-            return
-        }
-
         viewModelScope.launch {
-            _isLoading.value = true
-            val result = loginUseCase(usernameValue, passwordValue)
-            result.onSuccess { token ->
-                _errorMessage.value = null
-                _navigationCommand.value = "Notes"
-            }.onFailure { exception ->
-                _errorMessage.value = exception.message ?: "Error desconocido"
+            try {
+                val result = loginUseCase.invoke(
+                    _uiState.value.email, _uiState.value.password
+                )
+
+                if (result.isFailure) {
+                    _uiState.value = _uiState.value.copy(
+                        errorMessage = "No se pudo completar el acceso", isSuccess = false
+                    )
+                } else {
+                    _uiState.value = _uiState.value.copy(
+                        errorMessage = null, isSuccess = true
+                    )
+                }
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    errorMessage = "No se pudo completar el acceso", isSuccess = false
+                )
             }
-            _isLoading.value = false
         }
     }
-
-    fun onNavigationHandled() {
-        _navigationCommand.value = null
-    }
-
-    fun navigateToRegister() {
-        _navigationCommand.value = "Register"
-    }
-
 }
+
+data class LoginUiStates(
+    val email: String = "",
+    val password: String = "",
+
+    val isLoading: Boolean = false,
+    val errorMessage: String? = "",
+    val isSuccess: Boolean = false
+)
